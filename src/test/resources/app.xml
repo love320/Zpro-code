@@ -58,7 +58,7 @@
     </bean> 
 	
 	<aop:config>  
-        <aop:pointcut id="allServiceMethod" expression="execution(* app.services..*.*(..))" />  
+        <aop:pointcut id="allServiceMethod" expression="execution(* com.love320.zpro.code.services..*.*(..))" />  
         <aop:advisor advice-ref="txAdvice" pointcut-ref="allServiceMethod" />  
     </aop:config>  
       

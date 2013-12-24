@@ -46,6 +46,12 @@ public abstract class BaseService<T> {
 		return (T) session.get(entity, id);
 	}
 	
+	//指定实体类型和ID获取对象
+	protected Class get(Class entity,Long id){
+		Session session = getSession();
+		return (Class)session.get(entity, id);
+	}
+	
 	//更新对象
 	protected boolean update(T obj){
 		Session session = getSession();

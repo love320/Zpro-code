@@ -14,7 +14,7 @@ public class Filter {
 	
 	/** 条件符 *_*/
 	public enum Operator {
-		EQ, LIKE, GT, LT, GE, LE
+		EQ,NE, LIKE, GT, LT, GE, LE
 	}
 	
 	/** 数据类型 *_*/

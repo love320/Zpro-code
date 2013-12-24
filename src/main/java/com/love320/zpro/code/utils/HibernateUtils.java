@@ -43,6 +43,9 @@ public class HibernateUtils {
 		case EQ:
 			criterion = Restrictions.eq(name, value);
 			break;
+		case NE:
+			criterion = Restrictions.ne(name, value);
+			break;
 		case LIKE:
 			criterion = Restrictions.like(name, (String) value, MatchMode.ANYWHERE);
 			break;
@@ -57,6 +60,7 @@ public class HibernateUtils {
 			break;
 		case GT:
 			criterion = Restrictions.gt(name, value);
+			break;
 		}
 		
 		return criterion;
@@ -75,5 +79,33 @@ public class HibernateUtils {
 		}
 		return true;
 	}
+	
+	public static boolean buildCriterionByFilter(Criteria criteria,List<Filter> filters){
+		for (Filter filter : filters) {
+			if (filter.isMany()) { //多个条件 带 or
+				Disjunction disjunction = Restrictions.disjunction();
+				for (String param : filter.getNames()) {
+					String[] names = param.split("\\.");
+					Criteria criteriaTemp = criteria;
+					for(int i = 0 ; i < names.length - 1;i++){
+						criteriaTemp = criteriaTemp.createCriteria(names[i]);
+					}
+					Criterion criterion = buildCriterion(names[names.length - 1], filter.getValue(), filter.getOperator());
+					disjunction.add(criterion);
+				}
+				criteria.add(disjunction);
+			} else {//单一条件
+				String[] names = filter.getName().split("\\.");
+				Criteria criteriaTemp = criteria;
+				for(int i = 0 ; i < names.length - 1;i++){
+					criteriaTemp = criteriaTemp.createCriteria(names[i]);
+				}
+				Criterion criterion = buildCriterion(names[names.length - 1],filter.getValue(),filter.getOperator());
+				criteriaTemp.add(criterion);
+			}
+		}
+		return true;
+	}
+
 
 }
